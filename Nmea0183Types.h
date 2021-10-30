@@ -15,14 +15,12 @@ namespace zi {
 		GPZDA
 	};
 
-	enum LATITUDE_DIRECTION :bool {
-		NORTH,
-		SOUTH
-	};
 
-	enum LONGITUDE_DIRECTION :bool {
-		EAST,
-		WEST
+	enum DIRECTION :char {
+		NORTH = 'N',
+		SOUTH = 'S',
+		EAST = 'E',
+		WEST = 'W'
 	};
 
 	enum NMEA_GLL_STATUS:char {
@@ -43,15 +41,11 @@ namespace zi {
 		unsigned int seconds =0;
 	};
 
-	struct nmea_latitude {
+	struct nmea_degrees {
 		float value =0;
-		LATITUDE_DIRECTION direction =LATITUDE_DIRECTION::NORTH;
+		DIRECTION direction = DIRECTION::NORTH;
 	};
 
-	struct nmea_longitude {
-		float value =0;
-		LONGITUDE_DIRECTION direction =LONGITUDE_DIRECTION::EAST;
-	};
 
 	struct nmea_metering_value {
 		float value = 0;
@@ -61,14 +55,14 @@ namespace zi {
 	struct nmea_gll {
 		struct nmea_time time;
 		NMEA_GLL_STATUS status = NMEA_GLL_STATUS::INVALID;
-		struct nmea_latitude latitude;
-		struct nmea_longitude longitude;
+		struct nmea_degrees latitude;
+		struct nmea_degrees longitude;
 	};
 
 	struct nmea_gga {
 		struct nmea_time time;
-		struct nmea_latitude latitude;
-		struct nmea_longitude longitude;
+		struct nmea_degrees latitude;
+		struct nmea_degrees longitude;
 		GPS_QUALITY signal_quality = GPS_QUALITY::UNDEF;
 		unsigned int sattelites_in_use = 0;
 		float hdop = 0;

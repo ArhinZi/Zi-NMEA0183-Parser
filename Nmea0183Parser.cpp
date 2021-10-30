@@ -148,8 +148,8 @@ bool Nmea0183Parser::parse_gll(const string &sentence_data)
                 break;
                 //Latitude direction
             case 1:
-                if (buff == "N") gll.latitude.direction = LATITUDE_DIRECTION::NORTH;
-                else if (buff == "S") gll.latitude.direction = LATITUDE_DIRECTION::SOUTH;
+                if (buff == "N") gll.latitude.direction = DIRECTION::NORTH;
+                else if (buff == "S") gll.latitude.direction = DIRECTION::SOUTH;
                 break;
                 //Longitude
             case 2:
@@ -159,8 +159,8 @@ bool Nmea0183Parser::parse_gll(const string &sentence_data)
                 break;
                 //Longitude direction
             case 3:
-                if (buff == "E") gll.longitude.direction = LONGITUDE_DIRECTION::EAST;
-                else if (buff == "W") gll.longitude.direction = LONGITUDE_DIRECTION::WEST;
+                if (buff == "E") gll.longitude.direction = DIRECTION::EAST;
+                else if (buff == "W") gll.longitude.direction = DIRECTION::WEST;
                 break;
                 //UTC
             case 4:
