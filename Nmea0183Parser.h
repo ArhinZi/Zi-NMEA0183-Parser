@@ -21,6 +21,7 @@ namespace zi {
 		int checksum(const string &sentence_data);
 		bool check_checksum(const nmea_sentence& sentence);
 		NMEA_TYPE check_sentence_type(const string &sentence_type);
+		bool parse_gga(const string& sentence_data);
 		bool parse_gll(const string &sentence_data);
 		bool parse_buffer();
 	};

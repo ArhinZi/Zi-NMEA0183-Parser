@@ -15,7 +15,6 @@ bool Nmea0183Parser::parse(string data)
     }
     if (data.size() + buffer.size() > max_buffer_size) {
         buffer.clear();
-        return false;
     }
 	buffer.append(data);
 	return parse_buffer();
@@ -86,9 +85,6 @@ bool Nmea0183Parser::parse_buffer()
                 return false;
             }
         }
-        else if (buffer[i] == ' ') {
-            //DO NOTHING
-        }
     }
 
     if (end == 0 && start == 0)
@@ -104,19 +100,44 @@ bool Nmea0183Parser::check_checksum(const nmea_sentence& sentence)
     return sentence.checksum == intToHexChar(checksum(sentence.type + ',' + sentence.data));
 }
 
+NMEA_TYPE Nmea0183Parser::check_sentence_type(const string& sentence_type)
+{
+    //Checking first five chars in sentence
+    if (sentence_type == "GPGGA")
+        return NMEA_TYPE::GPGGA;
+    if (sentence_type == "GPGSA")
+        return NMEA_TYPE::GPGSA;
+    if (sentence_type == "GPGSV")
+        return NMEA_TYPE::GPGSV;
+    if (sentence_type == "GPRMC")
+        return NMEA_TYPE::GPRMC;
+    if (sentence_type == "GPCHN")
+        return NMEA_TYPE::GPCHN;
+    if (sentence_type == "GPGLL")
+        return NMEA_TYPE::GPGLL;
+    if (sentence_type == "GPVTG")
+        return NMEA_TYPE::GPVTG;
+    if (sentence_type == "GPZDA")
+        return NMEA_TYPE::GPZDA;
+
+    return NMEA_TYPE::NONE;
+}
+
 bool Nmea0183Parser::parse_gll(const string &sentence_data)
 {
     // 5532.8492,N,03729.0987,E,004241.469,A
+    // latitude, lat_direction, longitude, lon_direction, utc, date_validity
 
     int index = 0;
     string buff = "";
     for (int i = 0; i <= sentence_data.size(); i++) {
         char c = sentence_data[i];
         if (c != ',' && i != sentence_data.size()) {
-            buff += c;
+            if(c != ' ')
+                buff += c;
         }
-        else {
-
+        else if (!buff.empty())
+        {
             switch (index)
             {
                 //Latitude
@@ -161,7 +182,10 @@ bool Nmea0183Parser::parse_gll(const string &sentence_data)
             default:
                 break;
             }
-
+            index++;
+            buff.clear();
+        }
+        else {
             index++;
             buff.clear();
         }
@@ -169,25 +193,9 @@ bool Nmea0183Parser::parse_gll(const string &sentence_data)
     return true;
 }
 
-NMEA_TYPE Nmea0183Parser::check_sentence_type(const string & sentence_type)
+bool zi::Nmea0183Parser::parse_gga(const string& sentence_data)
 {
-    //Checking first five chars in sentence
-    if (sentence_type == "GPGGA")
-        return NMEA_TYPE::GPGGA;
-    if (sentence_type == "GPGSA")
-        return NMEA_TYPE::GPGSA;
-    if (sentence_type == "GPGSV")
-        return NMEA_TYPE::GPGSV;
-    if (sentence_type == "GPRMC")
-        return NMEA_TYPE::GPRMC;
-    if (sentence_type == "GPCHN")
-        return NMEA_TYPE::GPCHN;
-    if (sentence_type == "GPGLL")
-        return NMEA_TYPE::GPGLL;
-    if (sentence_type == "GPVTG")
-        return NMEA_TYPE::GPVTG;
-    if (sentence_type == "GPZDA")
-        return NMEA_TYPE::GPZDA;
+    // 004241.47, 5532.8492, N, 03729.0987, E, 1, 04, 2.0, -0015,M,,,,
 
-    return NMEA_TYPE::NONE;
+    return false;
 }
