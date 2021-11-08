@@ -53,6 +53,7 @@ namespace zi {
 	};
 
 	struct nmea_gll {
+		bool is_actual = false;
 		struct nmea_time time;
 		NMEA_GLL_STATUS status = NMEA_GLL_STATUS::INVALID;
 		struct nmea_degrees latitude;
@@ -60,6 +61,7 @@ namespace zi {
 	};
 
 	struct nmea_gga {
+		bool is_actual = false;
 		struct nmea_time time;
 		struct nmea_degrees latitude;
 		struct nmea_degrees longitude;

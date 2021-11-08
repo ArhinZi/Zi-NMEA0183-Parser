@@ -9,8 +9,9 @@ namespace zi {
 	public:
 		struct nmea_gll gll;
 
-		Nmea0183Parser(int max_data_size, int max_buffer_size);
+		Nmea0183Parser(unsigned int max_data_size, unsigned int max_buffer_size);
 		bool parse(string data);
+		void deactualize();
 	private:
 		unsigned int max_data_size;
 		unsigned int max_buffer_size;

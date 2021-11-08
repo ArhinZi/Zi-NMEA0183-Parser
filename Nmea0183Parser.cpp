@@ -2,7 +2,8 @@
 
 using namespace zi;
 
-Nmea0183Parser::Nmea0183Parser(int max_data_size, int max_buffer_size)
+Nmea0183Parser::Nmea0183Parser(unsigned int max_data_size, 
+                                unsigned int max_buffer_size)
 {
 	this->max_data_size = max_data_size;
     this->max_buffer_size = max_buffer_size;
@@ -18,6 +19,10 @@ bool Nmea0183Parser::parse(string data)
     }
 	buffer.append(data);
 	return parse_buffer();
+}
+
+void Nmea0183Parser::deactualize() {
+    this->gll.is_actual = false;
 }
 
 string Nmea0183Parser::intToHexChar(int var)
@@ -190,6 +195,7 @@ bool Nmea0183Parser::parse_gll(const string &sentence_data)
             buff.clear();
         }
     }
+    this->gll.is_actual = true;
     return true;
 }
 
